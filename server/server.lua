@@ -5,22 +5,18 @@
 -- |___|_| |_| |_/_/   \_\_|\__,_|\__,_|_| |_|\___/ 
 -- 
 
-
--- VARIBLES
+-- Function Variables --
 local Prefix = Function.Prefix
 local resourceName = Function.ResourceName
 local version = Function.Version
 
-
--- Run Checks
+-- Run Checks --
 Citizen.CreateThread(function()
     checkName()
     debugCheck()
 end)
 
-
--- Script Server Code
-
+-- Server Code --
 
 -- Credits --
 -- Don't be weird.. Leave my Credits!!
