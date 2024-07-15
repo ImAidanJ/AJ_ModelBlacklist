@@ -11,7 +11,7 @@
 Function = {}
 Function.Prefix = "^4[AJ:ModelBlacklist]^0"
 Function.ResourceName = "AJ_ModelBlacklist"
-Function.Version = "1.3.0"
+Function.Version = "1.3.1"
 
 -- Debug Mode --
 
