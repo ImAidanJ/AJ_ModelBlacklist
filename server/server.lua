@@ -18,6 +18,16 @@ end)
 
 -- Server Code --
 
+RegisterServerEvent('checkPlayerBypass')
+AddEventHandler('checkPlayerBypass', function()
+    local src = source
+    local vehBypass = Config.Bypass.Bypass and IsPlayerAceAllowed(src, Config.Bypass.VehBypass) or false
+    local pedBypass = Config.Bypass.Bypass and IsPlayerAceAllowed(src, Config.Bypass.PedBypass) or false
+    local wepBypass = Config.Bypass.Bypass and IsPlayerAceAllowed(src, Config.Bypass.WepBypass) or false
+
+    TriggerClientEvent('receivePlayerBypass', src, vehBypass, pedBypass, wepBypass)
+end)
+
 -- Credits --
 -- Don't be weird.. Leave my Credits!!
 print(Prefix.." "..resourceName.." by ImAidanJ")

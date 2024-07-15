@@ -1,9 +1,21 @@
---  ___              _    _     _                 _ 
--- |_ _|_ __ ___    / \  (_) __| | __ _ _ __     | |
---  | || '_ ` _ \  / _ \ | |/ _` |/ _` | '_ \ _  | |
---  | || | | | | |/ ___ \| | (_| | (_| | | | | |_| |
--- |___|_| |_| |_/_/   \_\_|\__,_|\__,_|_| |_|\___/ 
--- 
+local vehBypass = false
+local pedBypass = false
+local wepBypass = false
+
+RegisterNetEvent('receivePlayerBypass')
+AddEventHandler('receivePlayerBypass', function(veh, ped, wep)
+    vehBypass = veh
+    pedBypass = ped
+    wepBypass = wep
+end)
+
+-- Request bypass status from the server
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(5000) -- Check every 5 seconds
+        TriggerServerEvent('checkPlayerBypass')
+    end
+end)
 
 -- Functions --
 
@@ -45,7 +57,7 @@ if Config.VehicleBlacklist then
             Citizen.Wait(1000)
             local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
 
-            if vehicle and not Config.Bypass.VehBypass ~= true then
+            if vehicle and not vehBypass then
                 if IsVehicleBlacklisted(vehicle) then
                     SetVehicleEngineHealth(vehicle, -5000)
                     TriggerEvent("chat:addMessage", {template = '<div style="padding: 0.5vw; text-align: center; margin: 0.5vw; background-color: rgba(235, 21, 46, 0.6); border-radius: 3px;"><b>{0}</b></div>', args = {Config.VehBlacklistMessage}})
@@ -65,13 +77,14 @@ if Config.WeaponBlacklist then
             Citizen.Wait(500)
             local playerPed = GetPlayerPed(-1)
 
-            if playerPed and not Config.Bypass.WepBypass ~= true then
+            if playerPed and not wepBypass then
                 local _, weapon = GetCurrentPedWeapon(playerPed, true)
                 if IsWeaponBlacklisted(weapon) then
                     RemoveWeaponFromPed(playerPed, weapon)
                     TriggerEvent("chat:addMessage", {template = '<div style="padding: 0.5vw; text-align: center; margin: 0.5vw; background-color: rgba(255, 0, 0, 0.6); border-radius: 3px; color: white;"><b>{0}</b></div>', args = {Config.WepBlacklistMessage}})
                 end
             end
+        end
     end)
 end
 
@@ -83,7 +96,7 @@ if Config.PedBlacklist then
             Citizen.Wait(500)
             local playerPed = GetPlayerPed(-1)
 
-            if playerPed and not Config.Bypass.PedBypass ~= true then
+            if playerPed and not pedBypass then
                 playerModel = GetEntityModel(playerPed)
 
                 if not priorPlayerModel then
